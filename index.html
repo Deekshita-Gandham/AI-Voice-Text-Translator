@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Voice & Text Translator | Machine Translation & Speech Processing Demo</title>
+  <meta name="description" content="College AI demonstration project showcasing Machine Translation and Speech Processing pipelines with real-time visual step tracking.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./src/css/main.css">
+  <link rel="stylesheet" href="./src/css/pipeline.css">
+</head>
+<body>
+  <div class="app-background">
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header Section -->
+    <header class="app-header">
+      <div class="header-badge-bar">
+        <div class="header-badge">
+          <span class="pulse-dot"></span>
+          <span>College AI Demonstration Project</span>
+        </div>
+
+        <div class="header-controls">
+          <button id="toggleDemoPanelBtn" class="btn btn-secondary header-mode-btn" title="Open Guided Classroom Demo Panel">
+            <span>🎓 Classroom Demo</span>
+          </button>
+
+          <button id="togglePresentationModeBtn" class="btn btn-secondary header-mode-btn" title="Toggle High-Contrast Presentation Mode for Projectors">
+            <span>🖥️ Presentation Mode</span>
+          </button>
+        </div>
+      </div>
+
+      <h1 class="app-title">AI Voice &amp; Text Translator</h1>
+      <p class="app-subtitle">Machine Translation &amp; Speech Processing Pipeline Visualizer</p>
+    </header>
+
+    <!-- Guided Classroom Demo Panel (Expandable) -->
+    <div class="guided-demo-panel hidden" id="classroomDemoPanel">
+      <div class="guided-demo-header">
+        <h3>🎓 Guided Classroom Demonstration Workflow</h3>
+        <button class="close-demo-panel-btn" id="closeDemoPanelBtn" title="Close Guided Panel">&times;</button>
+      </div>
+      <div class="guided-demo-steps">
+        <div class="guided-step">
+          <span class="step-tag">STEP 1</span>
+          <h4>Choose Languages</h4>
+          <p>Select Source Language (or Auto Detect) and Target Language (e.g. English &rarr; Telugu).</p>
+        </div>
+        <div class="guided-step">
+          <span class="step-tag">STEP 2</span>
+          <h4>Enter or Speak a Sentence</h4>
+          <p>Click Voice Input to record speech OR choose a sample preset card / type manually.</p>
+        </div>
+        <div class="guided-step">
+          <span class="step-tag">STEP 3</span>
+          <h4>Speech-to-Text (STT)</h4>
+          <p>Browser Web Speech API converts your spoken audio into text tokens in the input box.</p>
+        </div>
+        <div class="guided-step">
+          <span class="step-tag">STEP 4</span>
+          <h4>Machine Translation (NMT)</h4>
+          <p>Click Translate to query Neural Machine Translation sequence-to-sequence endpoints.</p>
+        </div>
+        <div class="guided-step">
+          <span class="step-tag">STEP 5</span>
+          <h4>Text-to-Speech (TTS)</h4>
+          <p>Click Listen (TTS) to synthesize and speak the target translation aloud.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Processing Pipeline Component -->
+    <section class="pipeline-section" aria-label="Processing Pipeline">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          AI Processing Pipeline
+        </h2>
+        <div class="pipeline-status" id="pipelineStatus">
+          <span class="status-indicator ready"></span>
+          <span class="status-text">&bull; System Ready</span>
+        </div>
+      </div>
+
+      <div class="pipeline-flow">
+        <!-- Step 1: Input -->
+        <div class="pipeline-step active" data-step="1" id="step-input">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 01</span>
+            <span class="step-label">Input</span>
+          </div>
+        </div>
+
+        <div class="pipeline-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Step 2: Speech-to-Text -->
+        <div class="pipeline-step" data-step="2" id="step-stt">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 02</span>
+            <span class="step-label">Speech-to-Text</span>
+          </div>
+        </div>
+
+        <div class="pipeline-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Step 3: Language Processing -->
+        <div class="pipeline-step" data-step="3" id="step-nlp">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 03</span>
+            <span class="step-label">Language Processing</span>
+          </div>
+        </div>
+
+        <div class="pipeline-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Step 4: Machine Translation (NMT) -->
+        <div class="pipeline-step" data-step="4" id="step-nmt">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m5 8 6 6"/>
+              <path d="m4 14 6-6 2 3"/>
+              <path d="M2 5h12"/>
+              <path d="M7 2h1"/>
+              <path d="m22 22-5-10-5 10"/>
+              <path d="M14 18h6"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 04</span>
+            <span class="step-label">Machine Translation (NMT)</span>
+          </div>
+        </div>
+
+        <div class="pipeline-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Step 5: Translated Text -->
+        <div class="pipeline-step" data-step="5" id="step-translated">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 05</span>
+            <span class="step-label">Translated Text</span>
+          </div>
+        </div>
+
+        <div class="pipeline-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Step 6: Text-to-Speech -->
+        <div class="pipeline-step" data-step="6" id="step-tts">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+          </div>
+          <div class="step-details">
+            <span class="step-num">Step 06</span>
+            <span class="step-label">Text-to-Speech</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Presentation Demo Steps Banner -->
+    <div class="demo-steps-bar">
+      <span class="demo-steps-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        Demo Steps:
+      </span>
+      <div class="demo-steps-list">
+        <span class="demo-step-pill">1. Select Languages</span>
+        <span class="demo-arrow">&rarr;</span>
+        <span class="demo-step-pill">2. Speak or Type</span>
+        <span class="demo-arrow">&rarr;</span>
+        <span class="demo-step-pill">3. Click Translate</span>
+        <span class="demo-arrow">&rarr;</span>
+        <span class="demo-step-pill">4. View Translated Text</span>
+        <span class="demo-arrow">&rarr;</span>
+        <span class="demo-step-pill">5. Click Listen (TTS)</span>
+      </div>
+    </div>
+
+    <!-- 3 Selectable Sample Input Cards -->
+    <section class="sample-cards-section card">
+      <div class="card-header">
+        <h3>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="9" y1="9" x2="15" y2="9"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="17" x2="11" y2="17"/>
+          </svg>
+          Classroom Presentation Sample Input Cards
+        </h3>
+      </div>
+      <div class="sample-cards-grid">
+        <!-- Sample 1: English -> Telugu -->
+        <div class="sample-card" data-source="en" data-target="te" data-sample="What are you doing?">
+          <div class="sample-badge">Sample Input 1</div>
+          <div class="sample-pair">English &rarr; Telugu</div>
+          <div class="sample-text">"What are you doing?"</div>
+          <div class="sample-meaning">Expected: "మీరు ఏమి చేస్తున్నారు?"</div>
+        </div>
+
+        <!-- Sample 2: English -> Hindi -->
+        <div class="sample-card" data-source="en" data-target="hi" data-sample="Where are you going?">
+          <div class="sample-badge">Sample Input 2</div>
+          <div class="sample-pair">English &rarr; Hindi</div>
+          <div class="sample-text">"Where are you going?"</div>
+          <div class="sample-meaning">Expected: "आप कहाँ जा रहे हैं?"</div>
+        </div>
+
+        <!-- Sample 3: Telugu -> English -->
+        <div class="sample-card" data-source="te" data-target="en" data-sample="మీరు ఏమి చేస్తున్నారు?">
+          <div class="sample-badge">Sample Input 3</div>
+          <div class="sample-pair">Telugu &rarr; English</div>
+          <div class="sample-text">"మీరు ఏమి చేస్తున్నారు?"</div>
+          <div class="sample-meaning">Expected: "What are you doing?"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Translator Workspace Grid -->
+    <main class="translator-grid">
+      <!-- Input Side Panel -->
+      <div class="card source-card">
+        <div class="card-header">
+          <div class="language-select-wrapper">
+            <label for="sourceLanguage" class="sr-only">Source Language</label>
+            <select id="sourceLanguage" class="language-dropdown">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <span class="char-counter" id="charCounter">0 / 500</span>
+        </div>
+
+        <div class="card-body">
+          <textarea 
+            id="sourceText" 
+            class="translator-textarea" 
+            placeholder="Type text or click the microphone button to start speech recognition..." 
+            aria-label="Input Text"
+            maxlength="500"
+          ></textarea>
+        </div>
+
+        <div class="card-footer">
+          <div class="footer-top-row">
+            <div class="action-buttons-left">
+              <button id="micBtn" class="btn btn-icon btn-mic" title="Speech-to-Text (Browser Web Speech API)" aria-label="Microphone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+                <span class="btn-text">Voice Input</span>
+                <span class="recording-pulse"></span>
+              </button>
+              
+              <button id="clearBtn" class="btn btn-secondary" title="Clear text">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>Clear</span>
+              </button>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="sample-pills">
+              <span class="pill-label">Quick Presets:</span>
+              <button class="pill-btn" data-source="en" data-target="te" data-sample="What are you doing?">EN&rarr;TE (1)</button>
+              <button class="pill-btn" data-source="en" data-target="te" data-sample="Where are you going?">EN&rarr;TE (2)</button>
+              <button class="pill-btn" data-source="en" data-target="hi" data-sample="Where are you going?">EN&rarr;HI</button>
+              <button class="pill-btn" data-source="te" data-target="en" data-sample="మీరు ఏమి చేస్తున్నారు?">TE&rarr;EN</button>
+            </div>
+          </div>
+
+          <div class="mic-status-container">
+            <span class="stt-badge">Speech-to-Text (Browser Web Speech API)</span>
+            <span class="mic-status-hint" id="micStatusHint">Click the microphone and start speaking.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Action & Swap Section -->
+      <div class="translator-center-actions">
+        <button id="swapLanguagesBtn" class="btn btn-circle" title="Swap Source and Target Languages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 16V4M7 4L3 8M7 4L11 8"/>
+            <path d="M17 8V20M17 20L21 16M17 20L13 16"/>
+          </svg>
+        </button>
+
+        <button id="translateBtn" class="btn btn-primary btn-translate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Translate</span>
+          <span class="shortcut-badge">Ctrl + Enter</span>
+        </button>
+      </div>
+
+      <!-- Output Side Panel -->
+      <div class="card target-card">
+        <div class="card-header">
+          <div class="language-select-wrapper">
+            <label for="targetLanguage" class="sr-only">Target Language</label>
+            <select id="targetLanguage" class="language-dropdown">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="audio-visualizer-container" id="visualizerContainer">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div id="targetText" class="translator-textarea readonly-output" tabindex="0">
+            <span class="placeholder-text">Translation will appear here after clicking 'Translate' or processing speech input...</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="footer-top-row">
+            <div class="action-buttons-left">
+              <button id="ttsBtn" class="btn btn-icon btn-tts" title="Listen to Translation (Text-to-Speech)" aria-label="Play Speech">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                <span class="btn-text">Listen (TTS)</span>
+              </button>
+
+              <button id="ttsPauseBtn" class="btn btn-secondary btn-tts-control" title="Pause / Resume Speech" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="6" y="4" width="4" height="16"/>
+                  <rect x="14" y="4" width="4" height="16"/>
+                </svg>
+                <span>Pause</span>
+              </button>
+
+              <button id="ttsStopBtn" class="btn btn-secondary btn-tts-control" title="Stop Speech" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="4" width="16" height="16" rx="2"/>
+                </svg>
+                <span>Stop</span>
+              </button>
+
+              <button id="copyBtn" class="btn btn-secondary" title="Copy Translation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span id="copyBtnText">Copy</span>
+              </button>
+            </div>
+
+            <div class="output-stats" id="outputStats">
+              <span id="targetCharCount">0 chars</span>
+            </div>
+          </div>
+
+          <div class="tts-status-container">
+            <span class="tts-badge">TTS: Browser Web Speech API</span>
+            <span class="tts-status-hint" id="ttsStatusHint">Text-to-Speech converts the translated text into spoken audio using the browser's SpeechSynthesis API.</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Visual Architecture Flow Diagram Panel -->
+    <section class="arch-diagram-card card">
+      <div class="card-header">
+        <h3>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+          System Architecture Flow Diagram
+        </h3>
+      </div>
+      <div class="arch-diagram-flow">
+        <div class="arch-node">USER</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node">VOICE / TEXT INPUT</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node highlighted">SPEECH-TO-TEXT</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node">NLP / LANGUAGE PROCESSING</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node highlighted">MACHINE TRANSLATION</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node">TRANSLATED TEXT</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node highlighted">TEXT-TO-SPEECH</div>
+        <div class="arch-arrow">&rarr;</div>
+        <div class="arch-node">USER</div>
+      </div>
+    </section>
+
+    <!-- Technologies Used & AI Technologies Grid -->
+    <section class="edu-sections-grid">
+      <!-- Technologies Used -->
+      <div class="card edu-card">
+        <div class="card-header">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+            Technologies Used
+          </h3>
+        </div>
+        <div class="card-body edu-body">
+          <ul class="edu-list">
+            <li><strong>HTML5 &amp; CSS3:</strong> Semantic layout and custom dark glassmorphism styling.</li>
+            <li><strong>JavaScript ES6:</strong> Event handling, asynchronous pipeline orchestration, and UI controllers.</li>
+            <li><strong>Web Speech API (Speech Recognition):</strong> Client-side speech-to-text audio tokenization.</li>
+            <li><strong>Web Speech API (SpeechSynthesis):</strong> Client-side text-to-speech voice synthesis.</li>
+            <li><strong>Neural Machine Translation Endpoint:</strong> Google Translate GTX / MyMemory NMT services.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- AI / Language Technologies -->
+      <div class="card edu-card">
+        <div class="card-header">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4"/>
+              <path d="M12 8h.01"/>
+            </svg>
+            AI / Language Technologies
+          </h3>
+        </div>
+        <div class="card-body edu-body">
+          <ul class="edu-list">
+            <li><strong>Speech Recognition:</strong> Converts spoken audio into text using acoustic modeling.</li>
+            <li><strong>Natural Language Processing (NLP):</strong> Preprocesses and tokenizes input text.</li>
+            <li><strong>Neural Machine Translation (NMT):</strong> Translates text between languages using Transformer models.</li>
+            <li><strong>Text-to-Speech (TTS):</strong> Synthesizes translated text into spoken audio output.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Data Required for Production AI -->
+      <div class="card edu-card">
+        <div class="card-header">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+            Data Required for Production AI
+          </h3>
+        </div>
+        <div class="card-body edu-body">
+          <ul class="edu-list">
+            <li><strong>Speech / Audio Data:</strong> Multi-speaker voice datasets for acoustic model training.</li>
+            <li><strong>Transcribed Speech:</strong> Aligned audio-text pairs for supervised Speech-to-Text training.</li>
+            <li><strong>Parallel Multilingual Text:</strong> Millions of sentence pairs for Neural Machine Translation.</li>
+            <li><strong>Language Metadata &amp; Dictionary:</strong> BCP-47 tags, subword byte-pair vocabularies.</li>
+          </ul>
+          <p class="edu-note-box">
+            <em>Academic Note: Our classroom prototype leverages pre-trained browser and translation services rather than training a full neural model from scratch.</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- System Limitations -->
+      <div class="card edu-card">
+        <div class="card-header">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            System Limitations
+          </h3>
+        </div>
+        <div class="card-body edu-body">
+          <ul class="edu-list">
+            <li><strong>Background Noise:</strong> Ambient noise can affect speech recognition precision.</li>
+            <li><strong>Dialects &amp; Context:</strong> Translation quality varies depending on language and context.</li>
+            <li><strong>Network Connectivity:</strong> Machine translation endpoints require an active internet connection.</li>
+            <li><strong>Browser Voice Availability:</strong> TTS depends on voices installed on the host operating system.</li>
+            <li><strong>Accents &amp; Idioms:</strong> Regional accents and rare words may reduce recognition accuracy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Real-World Application & Case Study -->
+      <div class="card edu-card span-full">
+        <div class="card-header">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+            Real-World Application &amp; Case Study: Google Translate
+          </h3>
+        </div>
+        <div class="card-body edu-body">
+          <p class="case-study-text">
+            <strong>Google Translate</strong> is a real-world translation system that supports text and speech-based translation across multiple languages using Google Neural Machine Translation (GNMT) cloud infrastructure.
+          </p>
+          <div class="comparison-table">
+            <div class="comp-col">
+              <h5>Real-World System: Google Translate</h5>
+              <p>Scalable cloud NMT infrastructure processing 100B+ words daily using proprietary TPU hardware and custom voice synthesis models.</p>
+            </div>
+            <div class="comp-col highlight">
+              <h5>Classroom Prototype: AI Voice &amp; Text Translator</h5>
+              <p>Our project is a classroom prototype demonstrating the same high-level workflow (Speech-to-Text &rarr; NLP &rarr; Machine Translation &rarr; Text-to-Speech).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>AI Voice &amp; Text Translator &bull; College AI Demonstration Project</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/js/main-bundle.js"></script>
+</body>
+</html>
